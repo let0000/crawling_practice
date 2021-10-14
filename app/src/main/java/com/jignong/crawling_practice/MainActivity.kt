@@ -42,7 +42,6 @@ class MainActivity : AppCompatActivity() {
         getWeather(baseUrl, "서울", textView)
         getWeather(baseUrl, "춘천", textView2)
         getCityCovid(citycovidUrl, textView3)
-        Log.d(TAG, "onCreate: 수정!")
 
     }
 

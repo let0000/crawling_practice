@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     6 -> {
                         getWeather(baseUrl, "울산", weather_textview)
-                    }20°
+                    }
                     7 -> {
                         getWeather(baseUrl, "세종", weather_textview)
                     }

@@ -42,6 +42,7 @@ class MainActivity : AppCompatActivity() {
         totalcovid_textview = activityMainBinding.totalcoivdTextview
         covid_textview = activityMainBinding.coivdTextview
 
+        //스피너
         var city = resources.getStringArray(R.array.city)
         var adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, city)
         activityMainBinding.weatherSpinner.adapter = adapter

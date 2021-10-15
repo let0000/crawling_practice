@@ -4,6 +4,9 @@ import android.os.AsyncTask
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.core.os.bundleOf
 import com.jignong.crawling_practice.databinding.ActivityMainBinding
@@ -24,9 +27,9 @@ class MainActivity : AppCompatActivity() {
     private val covid19Url = "https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query=%EC%BD%94%EB%A1%9C%EB%82%98+%ED%99%95%EC%A7%84%EC%9E%90&oquery=%EC%A7%80%EC%97%AD+%EB%82%A0%EC%94%A8&tqi=hS%2FEPdprvhGss5t4i6Nssssss6C-509210"
     private val citycovidUrl = "http://ncov.mohw.go.kr/"
 
-    lateinit var textView: TextView
-    lateinit var textView2: TextView
-    lateinit var textView3: TextView
+    lateinit var weather_textview: TextView
+    lateinit var totalcovid_textview: TextView
+    lateinit var covid_textview: TextView
     val cityarray = arrayOfNulls<String>(18)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,13 +38,82 @@ class MainActivity : AppCompatActivity() {
         val activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
 
-        textView = activityMainBinding.textview
-        textView2 = activityMainBinding.textview2
-        textView3 = activityMainBinding.textview3
+        weather_textview = activityMainBinding.weatherTextview
+        totalcovid_textview = activityMainBinding.totalcoivdTextview
+        covid_textview = activityMainBinding.coivdTextview
 
-        getWeather(baseUrl, "서울", textView)
-        getWeather(baseUrl, "춘천", textView2)
-        getCityCovid(citycovidUrl, textView3)
+        var city = resources.getStringArray(R.array.city)
+        var adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, city)
+        activityMainBinding.weatherSpinner.adapter = adapter
+        activityMainBinding.weatherSpinner.setSelection(0)
+        activityMainBinding.weatherSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                when (position) {
+                    0 -> {
+                        getWeather(baseUrl, "서울", weather_textview)
+                    }
+                    1 -> {
+                        getWeather(baseUrl, "부산", weather_textview)
+                    }
+                    2 -> {
+                        getWeather(baseUrl, "대구", weather_textview)
+                    }
+                    3 -> {
+                        getWeather(baseUrl, "인천", weather_textview)
+                    }
+                    4 -> {
+                        getWeather(baseUrl, "광주", weather_textview)
+                    }
+                    5 -> {
+                        getWeather(baseUrl, "대전", weather_textview)
+                    }
+                    6 -> {
+                        getWeather(baseUrl, "울산", weather_textview)
+                    }20°
+                    7 -> {
+                        getWeather(baseUrl, "세종", weather_textview)
+                    }
+                    8 -> {
+                        getWeather(baseUrl, "경기", weather_textview)
+                    }
+                    9 -> {
+                        getWeather(baseUrl, "강원", weather_textview)
+                    }
+                    10 -> {
+                        getWeather(baseUrl, "충북", weather_textview)
+                    }
+                    11 -> {
+                        getWeather(baseUrl, "충남", weather_textview)
+                    }
+                    12 -> {
+                        getWeather(baseUrl, "전북", weather_textview)
+                    }
+                    13 -> {
+                        getWeather(baseUrl, "전남", weather_textview)
+                    }
+                    14 -> {
+                        getWeather(baseUrl, "경북", weather_textview)
+                    }
+                    15 -> {
+                        getWeather(baseUrl, "경남", weather_textview)
+                    }
+                    16 -> {
+                        getWeather(baseUrl, "제주", weather_textview)
+                    }
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+
+        getCovid(citycovidUrl, totalcovid_textview)
         Log.d(TAG, "onCreate: 수정!")
 
     }
@@ -56,22 +128,6 @@ class MainActivity : AppCompatActivity() {
                 textView.text = "$city 날씨는 : $tem"
                 //Log.d(TAG, "select : $temple")
                 Log.d(TAG, "$city : $tem")
-            }
-        }
-    }
-
-    private fun getCovid19(Url : String , textView: TextView){
-        CoroutineScope(Dispatchers.IO).launch {
-            val doc = Jsoup.connect(Url).get()
-            val temple = doc.select("#_cs_production_type > div > div.main_tab_area > div > div > ul > li.info_01")
-
-            val totalcovidcase = temple.get(0).text().substring(5,12)
-            val todaycovidcase = temple.get(0).text().substring(12)
-            Log.d(TAG, "getCovid19: $totalcovidcase")
-            Log.d(TAG, "getCovid19: $todaycovidcase")
-
-            CoroutineScope(Dispatchers.Main).launch {
-                textView.text = "총 확진자는 : $totalcovidcase\n 오늘의 확진자는 : $todaycovidcase"
             }
         }
     }
@@ -95,7 +151,7 @@ class MainActivity : AppCompatActivity() {
     // 16 제주
     // 17 검역
 
-    private fun getCityCovid(Url : String , textView: TextView){
+    private fun getCovid(Url : String , textView: TextView){
         CoroutineScope(Dispatchers.IO).launch {
             val doc = Jsoup.connect(Url).get()
             val total = doc.select("#content > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.num")
@@ -110,7 +166,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             CoroutineScope(Dispatchers.Main).launch {
-                textView.text = "총 확진자 :$totalcovid\n오늘의 확진자 :${todaycovid[2]}\n인천 확진자 :${cityarray[3]}"
+                textView.text = "총 확진자 :$totalcovid\n오늘의 확진자 :${todaycovid[2]}"
                 Log.d(TAG, "ex:${cityarray[17]}")
                 Log.d(TAG, "총 확진자: $totalcovid")
                 Log.d(TAG, "오늘의 확진자: ${todaycovid[2]}")

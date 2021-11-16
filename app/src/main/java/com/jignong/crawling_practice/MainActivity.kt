@@ -7,8 +7,10 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.os.bundleOf
+import com.bumptech.glide.Glide
 import com.jignong.crawling_practice.databinding.ActivityMainBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -24,8 +26,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val baseUrl = "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query="
-    private val covid19Url = "https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query=%EC%BD%94%EB%A1%9C%EB%82%98+%ED%99%95%EC%A7%84%EC%9E%90&oquery=%EC%A7%80%EC%97%AD+%EB%82%A0%EC%94%A8&tqi=hS%2FEPdprvhGss5t4i6Nssssss6C-509210"
-    private val citycovidUrl = "http://ncov.mohw.go.kr/"
+    private val covid19Url = "https://search.naver.com/search.naver?sm=tab_hty.top&where=nexearch&query=%EC%BD%94%EB%A1%9C%EB%82%98&oquery=%EC%A7%80%EC%97%AD%EB%B3%84+%EC%BD%94%EB%A1%9C%EB%82%98&tqi=hiLQwsp0YidssE%2FntPVssssssEl-368603"
 
     lateinit var weather_textview: TextView
     lateinit var totalcovid_textview: TextView
@@ -42,156 +43,155 @@ class MainActivity : AppCompatActivity() {
         totalcovid_textview = activityMainBinding.totalcoivdTextview
         covid_textview = activityMainBinding.coivdTextview
 
-        //날씨 스피너
-        var weather_city = resources.getStringArray(R.array.weather_city)
-        var weather_adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, weather_city)
-        activityMainBinding.weatherSpinner.adapter = weather_adapter
-        activityMainBinding.weatherSpinner.setSelection(0)
-        activityMainBinding.weatherSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when (position) {
-                    0 -> {
-                        getWeather(baseUrl, "서울", weather_textview)
-                    }
-                    1 -> {
-                        getWeather(baseUrl, "부산", weather_textview)
-                    }
-                    2 -> {
-                        getWeather(baseUrl, "대구", weather_textview)
-                    }
-                    3 -> {
-                        getWeather(baseUrl, "인천", weather_textview)
-                    }
-                    4 -> {
-                        getWeather(baseUrl, "광주", weather_textview)
-                    }
-                    5 -> {
-                        getWeather(baseUrl, "대전", weather_textview)
-                    }
-                    6 -> {
-                        getWeather(baseUrl, "울산", weather_textview)
-                    }
-                    7 -> {
-                        getWeather(baseUrl, "세종", weather_textview)
-                    }
-                    8 -> {
-                        getWeather(baseUrl, "경기", weather_textview)
-                    }
-                    9 -> {
-                        getWeather(baseUrl, "강원", weather_textview)
-                    }
-                    10 -> {
-                        getWeather(baseUrl, "충북", weather_textview)
-                    }
-                    11 -> {
-                        getWeather(baseUrl, "충남", weather_textview)
-                    }
-                    12 -> {
-                        getWeather(baseUrl, "전북", weather_textview)
-                    }
-                    13 -> {
-                        getWeather(baseUrl, "전남", weather_textview)
-                    }
-                    14 -> {
-                        getWeather(baseUrl, "경북", weather_textview)
-                    }
-                    15 -> {
-                        getWeather(baseUrl, "경남", weather_textview)
-                    }
-                    16 -> {
-                        getWeather(baseUrl, "제주", weather_textview)
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-        }
-
-        //코로나 스피너
-        var covid_city = resources.getStringArray(R.array.covid_city)
-        var covid_adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, covid_city)
-        activityMainBinding.covidSpinner.adapter = covid_adapter
-        activityMainBinding.covidSpinner.setSelection(0)
-        activityMainBinding.covidSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                when (position) {
-                    0 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 0)
-                    }
-                    1 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 1)
-                    }
-                    2 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 2)
-                    }
-                    3 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 3)
-                    }
-                    4 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 4)
-                    }
-                    5 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 5)
-                    }
-                    6 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 6)
-                    }
-                    7 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 7)
-                    }
-                    8 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 8)
-                    }
-                    9 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 9)
-                    }
-                    10 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 10)
-                    }
-                    11 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 11)
-                    }
-                    12 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 12)
-                    }
-                    13 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 13)
-                    }
-                    14 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 14)
-                    }
-                    15 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 15)
-                    }
-                    16 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 16)
-                    }
-                    17 -> {
-                        getcityCovid(citycovidUrl, covid_textview, 17)
-                    }
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-        }
-
-        getCovid(citycovidUrl, totalcovid_textview)
-        Log.d(TAG, "onCreate: 수정!")
-
+//        //날씨 스피너
+//        var weather_city = resources.getStringArray(R.array.weather_city)
+//        var weather_adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, weather_city)
+//        activityMainBinding.weatherSpinner.adapter = weather_adapter
+//        activityMainBinding.weatherSpinner.setSelection(0)
+//        activityMainBinding.weatherSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                when (position) {
+//                    0 -> {
+//                        getWeather(baseUrl, "서울", weather_textview)
+//                    }
+//                    1 -> {
+//                        getWeather(baseUrl, "부산", weather_textview)
+//                    }
+//                    2 -> {
+//                        getWeather(baseUrl, "대구", weather_textview)
+//                    }
+//                    3 -> {
+//                        getWeather(baseUrl, "인천", weather_textview)
+//                    }
+//                    4 -> {
+//                        getWeather(baseUrl, "광주", weather_textview)
+//                    }
+//                    5 -> {
+//                        getWeather(baseUrl, "대전", weather_textview)
+//                    }
+//                    6 -> {
+//                        getWeather(baseUrl, "울산", weather_textview)
+//                    }
+//                    7 -> {
+//                        getWeather(baseUrl, "세종", weather_textview)
+//                    }
+//                    8 -> {
+//                        getWeather(baseUrl, "경기", weather_textview)
+//                    }
+//                    9 -> {
+//                        getWeather(baseUrl, "강원", weather_textview)
+//                    }
+//                    10 -> {
+//                        getWeather(baseUrl, "충북", weather_textview)
+//                    }
+//                    11 -> {
+//                        getWeather(baseUrl, "충남", weather_textview)
+//                    }
+//                    12 -> {
+//                        getWeather(baseUrl, "전북", weather_textview)
+//                    }
+//                    13 -> {
+//                        getWeather(baseUrl, "전남", weather_textview)
+//                    }
+//                    14 -> {
+//                        getWeather(baseUrl, "경북", weather_textview)
+//                    }
+//                    15 -> {
+//                        getWeather(baseUrl, "경남", weather_textview)
+//                    }
+//                    16 -> {
+//                        getWeather(baseUrl, "제주", weather_textview)
+//                    }
+//                }
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//
+//            }
+//        }
+//
+//        //코로나 스피너
+//        var covid_city = resources.getStringArray(R.array.covid_city)
+//        var covid_adapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, covid_city)
+//        activityMainBinding.covidSpinner.adapter = covid_adapter
+//        activityMainBinding.covidSpinner.setSelection(0)
+//        activityMainBinding.covidSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                when (position) {
+//                    0 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 0)
+//                    }
+//                    1 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 1)
+//                    }
+//                    2 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 2)
+//                    }
+//                    3 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 3)
+//                    }
+//                    4 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 4)
+//                    }
+//                    5 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 5)
+//                    }
+//                    6 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 6)
+//                    }
+//                    7 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 7)
+//                    }
+//                    8 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 8)
+//                    }
+//                    9 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 9)
+//                    }
+//                    10 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 10)
+//                    }
+//                    11 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 11)
+//                    }
+//                    12 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 12)
+//                    }
+//                    13 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 13)
+//                    }
+//                    14 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 14)
+//                    }
+//                    15 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 15)
+//                    }
+//                    16 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 16)
+//                    }
+//                    17 -> {
+//                        getcityCovid(citycovidUrl, covid_textview, 17)
+//                    }
+//                }
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//
+//            }
+//        }
+//
+        getCovid(covid19Url, totalcovid_textview)
+        getCovidlocation(covid19Url, covid_textview, 3,2)
     }
 
     private fun getWeather(Url : String, city : String, textView: TextView){
@@ -208,55 +208,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 0 서울
-    // 1 부산
-    // 2 대구
-    // 3 인천
-    // 4 광주
-    // 5 대전
-    // 6 울산
-    // 7 세종
-    // 8 경기
-    // 9 강원
-    // 10 충북
-    // 11 충남
-    // 12 전북
-    // 13 전남
-    // 14 경북
-    // 15 경남
-    // 16 제주
-    // 17 검역
-
     private fun getCovid(Url : String , textView: TextView ){
         CoroutineScope(Dispatchers.IO).launch {
             val doc = Jsoup.connect(Url).get()
-            val total = doc.select("#content > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.num")
-            val totalcovid = total.text().substring(4)
-            val today = doc.select("#content > div.container > div > div.liveboard_layout > div.liveNumOuter > div.liveNum > ul > li:nth-child(1) > span.before")
-            val todaycovid = today.text().split(" ",")")
-
+            val covid = doc.select("#_cs_production_type > div > div.main_tab_area > div > div > ul > li.info_01")
+            val total = covid.text().split(" ")
             CoroutineScope(Dispatchers.Main).launch {
-                textView.text = "총 확진자 :$totalcovid\n오늘의 확진자 :${todaycovid[2]}"
-                Log.d(TAG, "총 확진자: $totalcovid")
-                Log.d(TAG, "오늘의 확진자: ${todaycovid[2]}")
+                textView.text = "${total[0]}\n${total[1]}\n+${total[2]}"
+                Log.d(TAG, "$total")
             }
         }
     }
 
-    private fun getcityCovid(Url : String , textView: TextView , citynum : Int){
+    //1,1 에서 3,2 까지
+    //1,8
+    private fun getCovidlocation(Url : String, textView: TextView, x : Int, y : Int){
         CoroutineScope(Dispatchers.IO).launch {
             val doc = Jsoup.connect(Url).get()
-            val temple = doc.select(".rpsam_graph > #main_maplayout2 > button")
-
-            for (i in 0 until 18){
-                val city = temple.get(i).text().substring(2)
-                cityarray.set(i, city)
-            }
-
+            val seoul = doc.select("#_cs_production_type > div > div:nth-child(4) > div > div:nth-child(3) > div:nth-child($x) > div > table > tbody > tr:nth-child($y)")
+            val total = seoul.text().split(" ")
             CoroutineScope(Dispatchers.Main).launch {
-                textView.text = "${cityarray[citynum]}"
-                Log.d(TAG, "ex:${cityarray[citynum]}")
-
+                textView.text = "${total[0]}\n${total[1]}\n+${total[2]}"
+                Log.d(TAG, "${total}")
             }
         }
     }
